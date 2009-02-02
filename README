@@ -34,7 +34,7 @@ class Foo < ActiveRecord::Base
   has_setting(:string_setting)
   has_setting(:another_string_setting, :type => :string)
   has_setting(:int_setting, :type => :int)
-  has_setting(:float_setting, :type => :int)
+  has_setting(:float_setting, :type => :float)
 end
 
 
