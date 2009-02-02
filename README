@@ -1,0 +1,62 @@
+=What is it?
+has_setting is a simple extension that enables ActiveRecord models to
+store settings in a separate settings table as key/value pairs.
+The key and value are stored as Strings.
+
+==Installation
+sudo gem install simplificator-has_setting
+
+==Setup
+ * Add a migration that looks more or less like the one in <em>help/001_create_settings.rb</em>
+ * Make sure the gem is loaded when your application starts
+
+==Config
+The model you want to hold settings (i.e. User, Profile, ...):
+<tt>has_setting(:name_of_the_setting)</tt>
+This will create the following methods for you on the owner class:
+ * <tt>name_of_the_setting=(value)</tt> a standard setter
+ * <tt>name_of_the_setting()</tt> a standard getter (the getter method takes an optional hash to override conversion settings, possible values are the same as the options in has_setting())
+ 
+<tt>has_setting(name, options)</tt> takes an optional hash of options. Currently one option is supported:
+<em>:type</em> allows you to convert the value:
+  * <em>:string</em> (default) leaves the value as it's stored in DB
+  * <em>:int</em> calls to_i() on not-nil values. You'll have to deal with Exceptions if something happens here
+  * <em>:float</em> calls to_f() on not-nil values. You'll have to deal with Exceptions if something happens here
+
+==Gotchas
+ * Since settings are stored in a has_many / belongs_to relation the parent needs to be saved before settings can be saved.
+ * Values are stored as __Strings__ but not checked for type. Only requirement is it supports the to_s() method (you'll find out if it does not...)
+ 
+ 
+==Example
+<code>
+class Foo < ActiveRecord::Base
+  has_setting(:string_setting)
+  has_setting(:another_string_setting, :type => :string)
+  has_setting(:int_setting, :type => :int)
+  has_setting(:float_setting, :type => :int)
+end
+
+
+foo = Foo.create
+
+foo.string_setting
+=> nil
+foo.string_setting= 'a string'
+foo.string_setting
+=> 'a string'
+
+foo.int_setting = 123
+foo.int_setting
+=> 123
+foo.int_setting = '123'
+foo.int_setting
+=> 123
+</code>
+
+   
+==Todo
+has_setting should stay as simple as possible... still some ideas are around:
+ * Custom formatter (to convert arbitrary objects, i.e. Date/Time/DateTime...)
+ * Add validation options
+ *
