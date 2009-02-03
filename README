@@ -15,17 +15,22 @@ The model you want to hold settings (i.e. User, Profile, ...):
 <tt>has_setting(:name_of_the_setting)</tt>
 This will create the following methods for you on the owner class:
  * <tt>name_of_the_setting=(value)</tt> a standard setter
- * <tt>name_of_the_setting()</tt> a standard getter (the getter method takes an optional hash to override conversion settings, possible values are the same as the options in has_setting())
+ * <tt>name_of_the_setting()</tt> a standard getter (the getter method takes an optional hash to override some options, possible values are the same as the options in has_setting())
  
-<tt>has_setting(name, options)</tt> takes an optional hash of options. Currently one option is supported:
+<tt>has_setting(name, options)</tt> takes an optional hash of options. Following options are supported:
 <em>:type</em> allows you to convert the value:
   * <em>:string</em> (default) leaves the value as it's stored in DB
   * <em>:int</em> calls to_i() on not-nil values. You'll have to deal with Exceptions if something happens here
   * <em>:float</em> calls to_f() on not-nil values. You'll have to deal with Exceptions if something happens here
+<em>:default</em> allows you to specify a default value that will be returned if the setting does not exist (i.e. has never been written). Note that the default value is _ignored_ if the setting exists, no matter what the value of the setting is. The default value is returned as is, no type conversion takes place
+
+==How it works
+A polymorphic parent-child relation is created between Setting and the parent/owning class.
+Getters/setters are added through meta-programming-magic. If the setter is invoked on a unsafed parent then the setting is not saved until the parent is saved, else setting is saved upon creation (i.e. first time the setter is called) / change (subsequent calls).
+The getters/setters can be used in standard AR validations, Rails mass assignments/form helpers and so on.
 
 ==Gotchas
- * Since settings are stored in a has_many / belongs_to relation the parent needs to be saved before settings can be saved.
- * Values are stored as __Strings__ but not checked for type. Only requirement is it supports the to_s() method (you'll find out if it does not...)
+ * Values are stored as _Strings_ but not checked for type. Only requirement is it supports the to_s() method (you'll find out if it does not...)
  
  
 ==Example
@@ -34,7 +39,7 @@ class Foo < ActiveRecord::Base
   has_setting(:string_setting)
   has_setting(:another_string_setting, :type => :string)
   has_setting(:int_setting, :type => :int)
-  has_setting(:float_setting, :type => :float)
+  has_setting(:float_setting, :type => :float, :default => 3.3)
 end
 
 
@@ -52,6 +57,13 @@ foo.int_setting
 foo.int_setting = '123'
 foo.int_setting
 => 123
+
+foo.float_setting
+=> 3.3
+foo.float_setting = nil
+foo.float_setting
+=> nil
+
 </code>
 
    

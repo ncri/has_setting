@@ -55,7 +55,7 @@ class HasSettingTest < Test::Unit::TestCase
   
   def test_has_nil_setting
     @foo.setting_1 = nil
-    assert(@foo.read_setting('Foo.setting_1'))
+    assert(@foo.read_setting('setting_1'))
     assert(!@foo.setting_1)
   end
   
@@ -75,6 +75,24 @@ class HasSettingTest < Test::Unit::TestCase
     assert_equal(12.3, @foo.setting_2)
     @bar.setting_2 = 12.3
     assert_equal(12, @bar.setting_2)
+  end
+  
+  def test_default_values()
+    assert_equal('def', @foo.with_default)
+    assert_equal('override def', @foo.with_default(:default => 'override def'))
+    @foo.with_default = 'not def'
+    assert_equal('not def', @foo.with_default)
+  end
+  
+  def test_write_settings_without_saved_parent
+    my_foo = Foo.new
+    count_before = HasSetting::Setting.count
+    my_foo.with_default = 'radabumm'
+    assert_equal(count_before, HasSetting::Setting.count)
+    assert_equal('radabumm', my_foo.with_default)
+    my_foo.save!
+    assert_equal(count_before + 1, HasSetting::Setting.count)
+    assert_equal('radabumm', my_foo.with_default)
   end
   
 end

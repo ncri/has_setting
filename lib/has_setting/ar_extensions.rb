@@ -1,11 +1,17 @@
 module HasSetting
   module InstanceMethods
     def write_setting(name, value)
-      setting = self.settings.find_or_initialize_by_name(name)
+      # find an existing setting or build a new one
+      setting = self.settings.find_by_name(name)
+      setting = self.settings.build(:name => name) if setting.blank?
       setting.value = value
-      setting.save
-      # reload so the getters work on the up-to-date collection
-      settings.reload
+      # save only if parent has been saved. else we expect a parent.save call
+      # which will cascade to the children since they were created with build()
+      unless self.new_record?
+        setting.save
+        # reload collection so the read_setting() finds the settings with 'detect()'
+        self.settings.reload
+      end
     end
     
     def read_setting(name)
@@ -31,26 +37,28 @@ module HasSetting
     #
     # Setup of the getter/setter
     def has_setting(name, options = {})
-      options[:type] ||= :string
       name = name.to_s
       raise ArgumentError.new("Setting name must not be blank") if name.blank?
+      # default settings
+      options[:type] ||= :string    # treat as string
+      options[:default] ||= nil     # no default value
       has_setting_options[name] = options
       
       define_method("#{name}=".intern) do |value|
         value = value.nil? ? nil : value.to_s 
-        write_setting("#{self.class.name}.#{name}", value)
+        write_setting(name, value)
       end
       
       # getter
       define_method(name) do |*args| 
-        setting = read_setting("#{self.class.name}.#{name}")
-        return nil if setting.nil?
-        
+        setting = read_setting(name)
         options = args.first || has_setting_options[name]
+        return options[:default] if setting.nil? 
+        
         case options[:type]
           when :string : setting.value
-          when :int : setting.value.blank? ? nil : setting.value.to_i
-          when :float : setting.value.blank? ? nil : setting.value.to_f
+          when :int : setting.value.nil? ? nil : setting.value.to_i
+          when :float : setting.value.nil? ? nil : setting.value.to_f
           else raise ArgumentError.new("Unsupported type: #{options[:type]}")
         end
       end
