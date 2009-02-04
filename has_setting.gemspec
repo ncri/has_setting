@@ -9,7 +9,8 @@ Gem::Specification.new do |s|
   s.description = %q{Stores settings as key/value pairs in a settings table and provides accessors for them on the owning object}
   s.files = 
     ['lib/has_setting.rb', 'lib/has_setting/ar_extensions.rb', 
-     'lib/has_setting/setting.rb', 
+     'lib/has_setting/setting.rb', 'lib/has_setting/formatters.rb',
      'test/bar.rb', 'test/foo.rb', 'test/baz.rb', 'test/test_helper.rb', 'test/unit/has_setting_test.rb',
+     'test/unit/formatters_rest.rb',
      'README']
 end
