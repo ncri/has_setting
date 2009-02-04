@@ -3,6 +3,9 @@ has_setting is a simple extension that enables ActiveRecord models to
 store settings in a separate settings table as key/value pairs where the key and value are stored as Strings.
 
 ==History
+ * 0.3.7: 
+   * Gem is now built using jeweler... after messing around and bumping versions and getting 
+     strange errors, this is 'it works' feeling coming back
  * 0.3.4: 
    * Added custom formatter support. no new formatters though...
  * 0.3.1: 
