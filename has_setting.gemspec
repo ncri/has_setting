@@ -11,6 +11,6 @@ Gem::Specification.new do |s|
     ['lib/has_setting.rb', 'lib/has_setting/ar_extensions.rb', 
      'lib/has_setting/setting.rb', 'lib/has_setting/formatters.rb',
      'test/bar.rb', 'test/foo.rb', 'test/baz.rb', 'test/test_helper.rb', 'test/unit/has_setting_test.rb',
-     'test/unit/formatters_rest.rb',
+     'test/unit/formatters_test.rb',
      'README']
 end
