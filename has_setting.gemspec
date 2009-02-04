@@ -10,6 +10,6 @@ Gem::Specification.new do |s|
   s.files = 
     ['lib/has_setting.rb', 'lib/has_setting/ar_extensions.rb', 
      'lib/has_setting/setting.rb', 
-     'test/bar.rb', 'test/foo.rb', 'test/baz.rb' 'test/test_helper.rb', 'test/unit/has_setting_test.rb',
-     'README.rdoc']
+     'test/bar.rb', 'test/foo.rb', 'test/baz.rb', 'test/test_helper.rb', 'test/unit/has_setting_test.rb',
+     'README']
 end
