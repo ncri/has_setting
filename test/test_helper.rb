@@ -12,8 +12,9 @@ ActiveRecord::Base.establish_connection(
 )
 
 ActiveRecord::Base.connection.drop_table(:settings) rescue ActiveRecord::StatementInvalid
-ActiveRecord::Base.connection.drop_table(:foos) rescue ActiveRecord::StatementInvalid
-ActiveRecord::Base.connection.drop_table(:bars) rescue ActiveRecord::StatementInvalid
+[:foos, :bars, :bazs].each do |table|
+  ActiveRecord::Base.connection.drop_table(table) rescue ActiveRecord::StatementInvalid
+end
 
 
 
@@ -23,13 +24,13 @@ ActiveRecord::Base.connection.create_table(:settings) do |table|
   table.string(:owner_type, :limit => 255,    :null => false)
   table.integer(:owner_id,                    :null => false)
 end
-ActiveRecord::Base.connection.create_table(:foos) do |table|
+[:foos, :bars, :bazs].each do |table|
+  ActiveRecord::Base.connection.create_table(table) do |t|
+  end
 end
-ActiveRecord::Base.connection.create_table(:bars) do |table|
-end
-
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 ActiveRecord::Base.logger.level = Logger::DEBUG # change to DEBUG if you want to see something :-)
 
 require File.join(File.dirname(__FILE__), 'foo')
 require File.join(File.dirname(__FILE__), 'bar')
+require File.join(File.dirname(__FILE__), 'baz')

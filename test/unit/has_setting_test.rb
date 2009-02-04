@@ -4,9 +4,10 @@ class HasSettingTest < Test::Unit::TestCase
   def setup()
     @foo = Foo.create!
     @bar = Bar.create!
+    @baz = Baz.create!
   end
   
-  def test_setting_has_accessor
+  def test_setting_has_accessors
     assert @foo.respond_to?(:setting_1)
     assert @foo.respond_to?(:setting_1=)
   end
@@ -21,6 +22,7 @@ class HasSettingTest < Test::Unit::TestCase
   def test_write_setting
     count_before = HasSetting::Setting.count
     @foo.write_setting('name', 'value1')
+    @foo.save!
     assert_equal(count_before + 1, HasSetting::Setting.count)
     setting = @foo.read_setting('name')
     assert setting
@@ -37,6 +39,7 @@ class HasSettingTest < Test::Unit::TestCase
     count_before = HasSetting::Setting.count
     assert(!@foo.setting_1)
     @foo.setting_1 = 'bli'
+    @foo.save!
     assert_equal(count_before + 1, HasSetting::Setting.count)
     assert_equal('bli', @foo.setting_1)
     @foo.setting_1 = 'bla'
@@ -46,12 +49,15 @@ class HasSettingTest < Test::Unit::TestCase
   def test_different_classes_do_not_share_setting
     count_before = HasSetting::Setting.count
     @foo.setting_1 = 'foo'
+    @foo.save!
     @bar.setting_1 = 'bar'
+    @bar.save!
     assert_equal(count_before + 2, HasSetting::Setting.count)
     
     assert_equal('foo', @foo.setting_1)
     assert_equal('bar', @bar.setting_1)
   end
+
   
   def test_has_nil_setting
     @foo.setting_1 = nil
@@ -95,4 +101,9 @@ class HasSettingTest < Test::Unit::TestCase
     assert_equal('radabumm', my_foo.with_default)
   end
   
+  def test_not_everyone_has_settings_association
+    assert_equal(true, @foo.respond_to?(:settings))
+    assert_equal(true, @bar.respond_to?(:settings))
+    assert_equal(false, @baz.respond_to?(:settings))
+  end
 end

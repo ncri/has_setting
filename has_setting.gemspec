@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = %q{has_setting}
-  s.version = "0.2.0"
-  s.date = %q{2009-02-01}
+  s.version = "0.3.1"
+  s.date = %q{Feb. 4, 2009}
   s.authors = ["Simplificator GmbH"]
   s.email = %q{info@simplificator.com}
   s.summary = %q{Basic Setting/Properties for ActiveRecord models}
@@ -10,6 +10,6 @@ Gem::Specification.new do |s|
   s.files = 
     ['lib/has_setting.rb', 'lib/has_setting/ar_extensions.rb', 
      'lib/has_setting/setting.rb', 
-     'test/bar.rb', 'test/foo.rb', 'test/test_helper.rb', 'test/unit/has_setting_test.rb',
+     'test/bar.rb', 'test/foo.rb', 'test/baz.rb' 'test/test_helper.rb', 'test/unit/has_setting_test.rb',
      'README.rdoc']
 end

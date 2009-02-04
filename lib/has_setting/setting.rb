@@ -3,5 +3,5 @@
 # keyword as column name)
 #
 class HasSetting::Setting < ActiveRecord::Base
-  belongs_to(:owner, :polymorphic => true)  
+  belongs_to(:owner, :polymorphic => true)
 end

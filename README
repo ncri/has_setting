@@ -1,7 +1,18 @@
 ==What is it?
 has_setting is a simple extension that enables ActiveRecord models to
-store settings in a separate settings table as key/value pairs.
-The key and value are stored as Strings.
+store settings in a separate settings table as key/value pairs where the key and value are stored as Strings.
+
+==History
+ * 0.3.1: 
+   * Bug Fixed: has_many(:settings) is not added to ActiveRecord::Base but only to the classes with has_setting
+   * Bug Fixed: options are not shared between classes
+   * Again changed the way settings are saved. Save is now done on parent.save with an after_save callback. (like this the settings are treated as if they were attributes of the owner)
+ * 0.2.x: 
+   * Added :default option
+   * changed way settings are saved so that unsaved parents can have settings too
+   * changed nameing scheme of setting names (incompatible with versions prior 0.2.x but since nobody uses the gem i dont care :-))
+ * 0.1.x: First Version
+
 
 ==Installation
 sudo gem install simplificator-has_setting
