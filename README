@@ -3,7 +3,7 @@ has_setting is a simple extension that enables ActiveRecord models to
 store settings in a separate settings table as key/value pairs where the key and value are stored as Strings.
 
 ==History
- * 0.3.2: 
+ * 0.3.3: 
    * Added custom formatter support. no new formatters though...
  * 0.3.1: 
    * Bug Fixed: has_many(:settings) is not added to ActiveRecord::Base but only to the classes with has_setting

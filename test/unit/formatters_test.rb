@@ -5,6 +5,9 @@ class FormattersTest < Test::Unit::TestCase
     [:string, :float, :int].each do |symbol|
       assert(Formatters.for_type(symbol), "No formatter for #{symbol}")
     end
+    assert_raises(ArgumentError) do
+      Formatters.for_type(:rarararararara_i_do_not_exist)
+    end
   end
   
   def test_string_formatter()

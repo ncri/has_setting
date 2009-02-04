@@ -1,38 +1,50 @@
 module HasSetting
   module Formatters
     @@formatters = {}
-    
-    def self.register_formatter(symbol, formatter)
+    #
+    # register a formatter:
+    #  * type: a Symbol that is used to identify this formatter in the has_setting options hash via the :type option
+    #  * formatter: the formatter, an object which supports to_type and to_s methods
+    def self.register_formatter(type, formatter)
       if !formatter.respond_to?(:to_s) || !formatter.respond_to?(:to_type)
         raise ArgumentError.new('Formatter does not support to_s/to_type')
       end
-      @@formatters[symbol] = formatter
+      @@formatters[type] = formatter
     end
     
-    def self.for_type(symbol)
-      formatter = @@formatters[symbol]
-      raise ArgumentError.new("Can not find a formatter for #{symbol}") unless formatter
+    # Lookup a Formatter by type symbol
+    # raises ArgumentError if the formatter is not found
+    def self.for_type(type)
+      formatter = @@formatters[type]
+      raise ArgumentError.new("Can not find a formatter for #{type}") unless formatter
       formatter
     end    
     
+    # Helper class which handles nil values
     class NilSafeFormatter
+      # Converts the String from DB to the specified type
+      # Nil is returned for nil values
       def to_type(value)
         safe_to_type(value) unless value == nil
       end
-      
+      # Converts the value to String for storing in DB
+      # Nil is returned for nil values
       def to_s(value)
         safe_to_s(value) unless value == nil
       end
     end
-    class StringFormatter
+    
+    # Formatter for Strings
+    class StringFormatter < NilSafeFormatter
       def to_type(value)
         value
       end
-      def to_s(value)
-        value
+      def safe_to_s(value)
+        value.to_s
       end
     end
-    
+    # Formatter for ints
+    # Throws ArgumentError if value can not be converted
     class IntFormatter < NilSafeFormatter
       # Integer() does not treat "2.6" the same as 2.6
       # while 2.6 is a valid Intger() (-> 2), "2.6" is not.
@@ -46,7 +58,8 @@ module HasSetting
         Integer(Float(value)).to_s
       end
     end
-    
+    # Formatter for float values
+    # Throws ArgumentError if value can not be converted
     class FloatFormatter < NilSafeFormatter
       def safe_to_type(value)
         Float(value)
