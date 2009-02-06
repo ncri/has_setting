@@ -24,7 +24,8 @@ module HasSetting
       self.class_eval do
         unless @has_setting_options # define only once
           # AR association to settings
-          has_many(:settings, :as => :owner, :class_name => 'HasSetting::Setting', :foreign_key => :owner_id)
+          has_many( :settings, :as => :owner, :class_name => 'HasSetting::Setting', 
+                    :foreign_key => :owner_id, :dependent => :destroy)
           after_save(:save_has_setting_association)
           @has_setting_options = {}
           def self.has_setting_options
@@ -40,7 +41,6 @@ module HasSetting
               end
             end
           end
-          
         end
       end
       

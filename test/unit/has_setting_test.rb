@@ -18,6 +18,15 @@ class HasSettingTest < Test::Unit::TestCase
     assert @foo.settings.is_a?(Array)
   end
   
+  def test_settings_are_destroyed
+    count_before = HasSetting::Setting.count
+    @foo.setting_1 = 10
+    @foo.save!
+    assert_equal(count_before + 1, HasSetting::Setting.count)
+    @foo.destroy
+    assert_equal(count_before, HasSetting::Setting.count)
+    
+  end
   
   def test_write_setting
     count_before = HasSetting::Setting.count
