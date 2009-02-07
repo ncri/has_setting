@@ -43,6 +43,38 @@ module HasSetting
         value.to_s
       end
     end
+    
+    class IntsFormatter < NilSafeFormatter
+      def safe_to_type(value)
+        value.split(',').map() {|item| Formatters.for_type(:int).to_type(item)}
+      end
+      def safe_to_s(value)
+        Array(value).map() {|item| Formatters.for_type(:int).to_s(item)}.join(',')
+      end
+    end
+    
+    class FloatsFormatter < NilSafeFormatter
+      def safe_to_type(value)
+        value.split(',').map() {|item| Formatters.for_type(:float).to_type(item)}
+      end
+      def safe_to_s(value)
+        Array(value).map() {|item| Formatters.for_type(:float).to_s(item)}.join(',')
+      end
+    end
+    
+    class StringsFormatter < NilSafeFormatter
+      def safe_to_type(value)
+        # Ruby does not know "negative look before". Or i dont know how to do it in ruby. Thus
+        # i ended up using some reverse calls... ugly. Anyone out there eager to help me out?
+        value.reverse.split(/,(?!\\)/).map() {|item| item.reverse.gsub('\,', ',')}.reverse
+      end
+      def safe_to_s(value)
+        # Escape the separator character ',' with a backslash
+        Array(value).map() {|item| item.gsub(',', '\,')}.join(',')
+      end
+    end
+    
+    
     # Formatter for ints
     # Throws ArgumentError if value can not be converted
     class IntFormatter < NilSafeFormatter

@@ -7,6 +7,7 @@ class HasSettingTest < Test::Unit::TestCase
     @baz = Baz.create!
   end
   
+  
   def test_setting_has_accessors
     assert @foo.respond_to?(:setting_1)
     assert @foo.respond_to?(:setting_1=)

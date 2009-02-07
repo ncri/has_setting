@@ -36,9 +36,7 @@ module HasSetting
           # Callback to save settings
           def save_has_setting_association
             self.settings.each do |setting|
-              if setting.changed?
-                setting.save
-              end
+              setting.save if setting.changed?
             end
           end
         end
@@ -63,14 +61,8 @@ module HasSetting
         setting = read_setting(name)
         options = args.first || self.class.has_setting_options[name]
         return options[:default] if setting.nil? 
-        formatter = HasSetting::Formatters.for_type(options[:type])
+        formatter = Formatters.for_type(options[:type])
         formatter.to_type(setting.value)
-        #case options[:type]
-        #  when :string : setting.value
-        #  when :int : setting.value.nil? ? nil : setting.value.to_i
-        #  when :float : setting.value.nil? ? nil : setting.value.to_f
-        #  else raise ArgumentError.new("Unsupported type: #{options[:type]}")
-        #end
       end
     end
   end

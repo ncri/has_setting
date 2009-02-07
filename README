@@ -3,6 +3,8 @@ has_setting is a simple extension that enables ActiveRecord models to
 store settings in a separate settings table as key/value pairs where the key and value are stored as Strings.
 
 ==History
+ * 0.3.9:
+   * added type :strings, :floats, :ints. They store the contents of an array as a comma separated string. 
  * 0.3.8:
    * added dependent destroy option. no more zombie settings lingering around.
  * 0.3.7: 
@@ -37,10 +39,15 @@ This will create the following methods for you on the owner class:
  
 <tt>has_setting(name, options)</tt> takes an optional hash of options. Following options are supported:
 <em>:type</em> allows you to convert the value:
-  * <em>:string</em> (default) leaves the value as it's stored in DB
-  * <em>:int</em> calls to_i() on not-nil values. You'll have to deal with Exceptions if something happens here
-  * <em>:float</em> calls to_f() on not-nil values. You'll have to deal with Exceptions if something happens here
-<em>:default</em> allows you to specify a default value that will be returned if the setting does not exist (i.e. has never been written). Note that the default value is _ignored_ if the setting exists, no matter what the value of the setting is. The default value is returned as is, no type conversion takes place
+  * <em>:string</em> (default) Uses the StringFormatter to convert from/to String (actually this formatter just leaves the value as it is)
+  * <em>:int</em> Uses the IntFormatter to convert from/to int values.
+  * <em>:float</em> Uses the FloatFormatter to convert from/to float values.
+  * <em>:ints</em> Uses the IntsFormatter to convert from/to int[]
+  * <em>:floats</em> Uses the FloatsFormatter to convert from/to float[]
+  * <em>:strings</em> Uses the StringsFormatter to convert from/to string[]
+<em>:default</em> allows you to specify a default value that will be returned if the setting does not exist (i.e. has never been written). Note that the default value is _ignored_ if the setting exists, no matter what the value of the setting is. The default value is returned as is, no type conversion takes place.
+
+
 
 ==How it works
 A polymorphic parent-child relation is created between Setting and the parent/owning class.
@@ -48,7 +55,8 @@ Getters/setters are added through meta-programming-magic. If the setter is invok
 The getters/setters can be used in standard AR validations, Rails mass assignments/form helpers and so on.
 
 ==Gotchas
- * Values are stored as _Strings_ but not checked for type. Only requirement is it supports the to_s() method (you'll find out if it does not...)
+ * Values are stored as Strings in the DB. Values are converted with one of the formatters (depending on selected :type). If you try to store an unsupported type or anything other than the type you selected there might be an exception (i.e. if you try to store "foobar" as an :type => :int)
+ * Currently there are no length validations on the 'name' and 'value' column of Setting. Take care not to store values to big. Especially when using the array formatters (:floats, :ints, :strings)
  
  
 ==Example

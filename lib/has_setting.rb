@@ -9,5 +9,8 @@ end
 
 
 HasSetting::Formatters.register_formatter(:string, HasSetting::Formatters::StringFormatter.new)
+HasSetting::Formatters.register_formatter(:strings, HasSetting::Formatters::StringsFormatter.new)
 HasSetting::Formatters.register_formatter(:float, HasSetting::Formatters::FloatFormatter.new)
+HasSetting::Formatters.register_formatter(:floats, HasSetting::Formatters::FloatFormatter.new)
 HasSetting::Formatters.register_formatter(:int, HasSetting::Formatters::IntFormatter.new)
+HasSetting::Formatters.register_formatter(:ints, HasSetting::Formatters::IntsFormatter.new)
