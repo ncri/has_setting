@@ -14,3 +14,5 @@ HasSetting::Formatters.register_formatter(:float, HasSetting::Formatters::FloatF
 HasSetting::Formatters.register_formatter(:floats, HasSetting::Formatters::FloatFormatter.new)
 HasSetting::Formatters.register_formatter(:int, HasSetting::Formatters::IntFormatter.new)
 HasSetting::Formatters.register_formatter(:ints, HasSetting::Formatters::IntsFormatter.new)
+HasSetting::Formatters.register_formatter(:boolean, HasSetting::Formatters::BooleanFormatter.new)
+HasSetting::Formatters.register_formatter(:booleans, HasSetting::Formatters::BooleanFormatter.new)

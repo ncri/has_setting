@@ -3,6 +3,8 @@ has_setting is a simple extension that enables ActiveRecord models to
 store settings in a separate settings table as key/value pairs where the key and value are stored as Strings.
 
 ==History
+ * 0.3.10:
+   * added boolean and booleans formatters
  * 0.3.9:
    * added type :strings, :floats, :ints. They store the contents of an array as a comma separated string. 
  * 0.3.8:
@@ -41,10 +43,12 @@ This will create the following methods for you on the owner class:
 <em>:type</em> allows you to convert the value:
   * <em>:string</em> (default) Uses the StringFormatter to convert from/to String (actually this formatter just leaves the value as it is)
   * <em>:int</em> Uses the IntFormatter to convert from/to int values.
+  * <em>:boolean</em> Uses the BooleanFormatter to convert from/to boolean values.
   * <em>:float</em> Uses the FloatFormatter to convert from/to float values.
   * <em>:ints</em> Uses the IntsFormatter to convert from/to int[]
   * <em>:floats</em> Uses the FloatsFormatter to convert from/to float[]
   * <em>:strings</em> Uses the StringsFormatter to convert from/to string[]
+  * <em>:booleans</em> Uses the BooleansFormatter to convert from/to boolean[]
 <em>:default</em> allows you to specify a default value that will be returned if the setting does not exist (i.e. has never been written). Note that the default value is _ignored_ if the setting exists, no matter what the value of the setting is. The default value is returned as is, no type conversion takes place.
 
 

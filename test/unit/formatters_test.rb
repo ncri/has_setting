@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 include HasSetting
 class FormattersTest < Test::Unit::TestCase
   def test_for_type
-    [:string, :float, :floats, :int, :ints, :strings].each do |symbol|
+    [:string, :float, :floats, :int, :ints, :strings, :boolean, :booleans].each do |symbol|
       assert(Formatters.for_type(symbol), "No formatter for #{symbol}")
     end
     assert_raises(ArgumentError) do
@@ -26,6 +26,7 @@ class FormattersTest < Test::Unit::TestCase
     assert_equal([',schni,schna,', 'bli', ',bla'], f.to_type('\,schni\,schna\,,bli,\,bla'))
     assert_equal([',,,,', ',,,', ',,', ','], f.to_type('\,\,\,\,,\,\,\,,\,\,,\,'))
   end
+  
 
   def test_string_formatter()
     f = Formatters::StringFormatter.new
@@ -33,6 +34,18 @@ class FormattersTest < Test::Unit::TestCase
     assert_equal('a', f.to_s('a'))
     assert_equal('', f.to_type(''))
     assert_equal('a', f.to_type('a'))
+  end
+  
+  def test_boolean_formatter
+    f = Formatters::BooleanFormatter.new
+    assert_equal('1', f.to_s(''))
+    assert_equal('1', f.to_s(true))
+    assert_equal('0', f.to_s(false))
+    assert_equal(nil, f.to_s(nil))
+    
+    assert_equal(true, f.to_type('1'))
+    assert_equal(false, f.to_type('0'))
+    assert_equal(nil, f.to_type(nil))
   end
   
   def test_int_formatter()
@@ -107,5 +120,16 @@ class FormattersTest < Test::Unit::TestCase
     assert_equal([1.2,1.3], f.to_type('1.2,1.3'))
     assert_equal([1.2,1.3], f.to_type('1.2, 1.3'))
   end
-  
+  def test_booleans_formatter
+    f = Formatters::BooleansFormatter.new
+    assert_equal(nil, f.to_s(nil))
+    assert_equal('1', f.to_s(true))
+    assert_equal('1', f.to_s([true]))
+    assert_equal('1,0', f.to_s([true,false]))
+    
+    assert_equal(nil, f.to_type(nil))
+    assert_equal([], f.to_type(''))
+    assert_equal([true], f.to_type('1'))
+    assert_equal([true, false], f.to_type('1,0'))
+  end
 end
