@@ -6,9 +6,10 @@ begin
     s.name = "has_setting"
     s.summary = %Q{simple setting extension to AR}
     s.email = "info@simplificator.com"
-    s.homepage = "http://github.com/pascalbetz/has_setting"
+    s.homepage = "http://github.com/simplificator/has_setting"
     s.description = 'Stores settings as key/value pairs in a settings table and provides accessors for them on the owning object'
     s.authors = ["Simplificator GmbH"]
+    s.files.exclude '**/*.sqlite3'
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"

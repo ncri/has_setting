@@ -24,11 +24,10 @@ Gem::Specification.new do |s|
     "test/foo.rb",
     "test/test_helper.rb",
     "test/unit/formatters_test.rb",
-    "test/unit/has_setting_test.rb",
-    "test/unit/test.sqlite3"
+    "test/unit/has_setting_test.rb"
   ]
   s.has_rdoc = true
-  s.homepage = %q{http://github.com/pascalbetz/has_setting}
+  s.homepage = %q{http://github.com/simplificator/has_setting}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.2}
