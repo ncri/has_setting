@@ -47,7 +47,8 @@ module HasSetting
       
       # default options
       options[:type] ||= :string    # treat as string
-      options[:default] ||= nil     # no default value
+        # default could be false, thats why we use has_key?
+      options[:default] = options.has_key?(:default) ? options[:default] : nil # no default
       self.has_setting_options[name] = options
       
       # setter

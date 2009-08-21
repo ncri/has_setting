@@ -4,6 +4,7 @@ class FormattersTest < Test::Unit::TestCase
   def test_for_type
     [:string, :float, :floats, :int, :ints, :strings, :boolean, :booleans].each do |symbol|
       assert(Formatters.for_type(symbol), "No formatter for #{symbol}")
+      assert_equal(Formatters.for_type(symbol).class.to_s, "HasSetting::Formatters::#{symbol.to_s.capitalize}Formatter")
     end
     assert_raises(ArgumentError) do
       Formatters.for_type(:rarararararara_i_do_not_exist)
@@ -131,5 +132,12 @@ class FormattersTest < Test::Unit::TestCase
     assert_equal([], f.to_type(''))
     assert_equal([true], f.to_type('1'))
     assert_equal([true, false], f.to_type('1,0'))
+    
+    
+    # test boolean with values != true|false
+    assert_equal('1', f.to_s('true'))
+    assert_equal('1', f.to_s(555))
+    
+    
   end
 end
