@@ -3,6 +3,10 @@ has_setting is a simple extension that enables ActiveRecord models to
 store settings in a separate settings table as key/value pairs where the key and value are stored as Strings.
 
 ==History
+ * 0.4.3:
+   * Changed behaviour of :boolean formatters: Now they treat '0', 0, false, nil and '' as false, everything else as true
+     This is not the same behaviour as ruby (treating only nil and false as false) but should help with input from web forms (i.e. checkboxes)
+     If you want strict ruby boolean behaviour, then use :strict_boolean as :type
  * 0.4.2:
    * bug fixes for boolean types default values
  * 0.3.10:
@@ -45,12 +49,14 @@ This will create the following methods for you on the owner class:
 <em>:type</em> allows you to convert the value:
   * <em>:string</em> (default) Uses the StringFormatter to convert from/to String (actually this formatter just leaves the value as it is)
   * <em>:int</em> Uses the IntFormatter to convert from/to int values.
-  * <em>:boolean</em> Uses the BooleanFormatter to convert from/to boolean values.
+  * <em>:boolean</em> Uses the BooleanFormatter to convert from/to boolean values; treating 0, '0', false, '' and nil as false.
+  * <em>:strict_boolean</em> Uses the StrictBooleanFormatter to convert from/to boolean values; treating false, and nil as false.
   * <em>:float</em> Uses the FloatFormatter to convert from/to float values.
   * <em>:ints</em> Uses the IntsFormatter to convert from/to int[]
   * <em>:floats</em> Uses the FloatsFormatter to convert from/to float[]
   * <em>:strings</em> Uses the StringsFormatter to convert from/to string[]
   * <em>:booleans</em> Uses the BooleansFormatter to convert from/to boolean[]
+  * <em>:strict_booleans</em> Uses the BooleansFormatter to convert from/to boolean[]
 <em>:default</em> allows you to specify a default value that will be returned if the setting does not exist (i.e. has never been written). Note that the default value is _ignored_ if the setting exists, no matter what the value of the setting is. The default value is returned as is, no type conversion takes place.
 
 

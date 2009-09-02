@@ -43,12 +43,15 @@ module HasSetting
         value.to_s
       end
     end
+    # Convert a Boolean to String and Back
+    # nil, '0', false, 0 and '' are considered __false__, everything else is __true__
+    # This is not like ruby where only nil and false are considered __false__
     class BooleanFormatter < NilSafeFormatter
       def safe_to_type(value)
         value == '1'
       end
       def safe_to_s(value)
-        value ? '1' : '0'
+        value && value != '0' && value != 0 && value != '' ? '1' : '0'
       end
     end
     class BooleansFormatter < NilSafeFormatter
@@ -57,6 +60,23 @@ module HasSetting
       end
       def safe_to_s(value)
         Array(value).map() {|item| Formatters.for_type(:boolean).to_s(item)}.join(',')
+      end
+    end
+    
+    class StrictBooleanFormatter < NilSafeFormatter
+      def safe_to_type(value)
+        value == '1'
+      end
+      def safe_to_s(value)
+        value ? '1' : '0'
+      end
+    end
+    class StrictBooleansFormatter < NilSafeFormatter
+      def safe_to_type(value)
+        value.split(',').map() {|item| Formatters.for_type(:strict_boolean).to_type(item)}
+      end
+      def safe_to_s(value)
+        Array(value).map() {|item| Formatters.for_type(:strict_boolean).to_s(item)}.join(',')
       end
     end
     

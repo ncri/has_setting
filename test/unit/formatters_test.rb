@@ -2,9 +2,15 @@ require File.dirname(__FILE__) + '/../test_helper'
 include HasSetting
 class FormattersTest < Test::Unit::TestCase
   def test_for_type
-    [:string, :float, :floats, :int, :ints, :strings, :boolean, :booleans].each do |symbol|
+    [:string, :float, :floats, :int, :ints, :strings, :boolean, :booleans, :strict_boolean, :strict_booleans].each do |symbol|
       assert(Formatters.for_type(symbol), "No formatter for #{symbol}")
-      assert_equal(Formatters.for_type(symbol).class.to_s, "HasSetting::Formatters::#{symbol.to_s.capitalize}Formatter")
+      if symbol == :strict_boolean
+        assert_equal(Formatters.for_type(symbol).class.to_s, "HasSetting::Formatters::StrictBooleanFormatter")
+      elsif symbol == :strict_booleans
+        assert_equal(Formatters.for_type(symbol).class.to_s, "HasSetting::Formatters::StrictBooleansFormatter")
+      else
+        assert_equal(Formatters.for_type(symbol).class.to_s, "HasSetting::Formatters::#{symbol.to_s.capitalize}Formatter")
+      end
     end
     assert_raises(ArgumentError) do
       Formatters.for_type(:rarararararara_i_do_not_exist)
@@ -39,9 +45,12 @@ class FormattersTest < Test::Unit::TestCase
   
   def test_boolean_formatter
     f = Formatters::BooleanFormatter.new
-    assert_equal('1', f.to_s(''))
+    assert_equal('0', f.to_s(''))
     assert_equal('1', f.to_s(true))
     assert_equal('0', f.to_s(false))
+    assert_equal('0', f.to_s('0'))
+    assert_equal('0', f.to_s(0))
+    assert_equal('0', f.to_s(''))
     assert_equal(nil, f.to_s(nil))
     
     assert_equal(true, f.to_type('1'))
@@ -49,6 +58,18 @@ class FormattersTest < Test::Unit::TestCase
     assert_equal(nil, f.to_type(nil))
   end
   
+  def test_strict_boolean_formatter
+    f = Formatters::StrictBooleanFormatter.new
+    assert_equal('1', f.to_s(''))
+    assert_equal('1', f.to_s(true))
+    assert_equal('0', f.to_s(false))
+    assert_equal('1', f.to_s('0'))
+    assert_equal(nil, f.to_s(nil))
+    
+    assert_equal(true, f.to_type('1'))
+    assert_equal(false, f.to_type('0'))
+    assert_equal(nil, f.to_type(nil))
+  end
   def test_int_formatter()
     f = Formatters::IntFormatter.new
     assert_raises(ArgumentError) do 
@@ -127,6 +148,7 @@ class FormattersTest < Test::Unit::TestCase
     assert_equal('1', f.to_s(true))
     assert_equal('1', f.to_s([true]))
     assert_equal('1,0', f.to_s([true,false]))
+    assert_equal('0,0,0,0,', f.to_s(['', 0, false, '0', nil]))
     
     assert_equal(nil, f.to_type(nil))
     assert_equal([], f.to_type(''))
@@ -137,7 +159,25 @@ class FormattersTest < Test::Unit::TestCase
     # test boolean with values != true|false
     assert_equal('1', f.to_s('true'))
     assert_equal('1', f.to_s(555))
+  end
+  
+  
+  def test_strict_booleans_formatter
+    f = Formatters::StrictBooleansFormatter.new
+    assert_equal(nil, f.to_s(nil))
+    assert_equal('1', f.to_s(true))
+    assert_equal('1', f.to_s([true]))
+    assert_equal('1,0', f.to_s([true,false]))
+    assert_equal('1,1', f.to_s([1,0]))
+    
+    assert_equal(nil, f.to_type(nil))
+    assert_equal([], f.to_type(''))
+    assert_equal([true], f.to_type('1'))
+    assert_equal([true, false], f.to_type('1,0'))
     
     
+    # test boolean with values != true|false
+    assert_equal('1', f.to_s('true'))
+    assert_equal('1', f.to_s(555))
   end
 end

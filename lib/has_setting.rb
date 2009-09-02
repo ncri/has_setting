@@ -16,3 +16,5 @@ HasSetting::Formatters.register_formatter(:int, HasSetting::Formatters::IntForma
 HasSetting::Formatters.register_formatter(:ints, HasSetting::Formatters::IntsFormatter.new)
 HasSetting::Formatters.register_formatter(:boolean, HasSetting::Formatters::BooleanFormatter.new)
 HasSetting::Formatters.register_formatter(:booleans, HasSetting::Formatters::BooleansFormatter.new)
+HasSetting::Formatters.register_formatter(:strict_boolean, HasSetting::Formatters::StrictBooleanFormatter.new)
+HasSetting::Formatters.register_formatter(:strict_booleans, HasSetting::Formatters::StrictBooleansFormatter.new)
