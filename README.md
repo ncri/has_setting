@@ -6,7 +6,7 @@ store settings in a separate settings table as key/value pairs where the key and
 
 # Installation
 
-add has_setting to your gemfile:
+Add has_setting to your gemfile:
 
     gem 'has_setting'
 
@@ -48,6 +48,13 @@ This will create the following methods for you on the owner class:
 A polymorphic parent-child relation is created between Setting and the parent/owning class.
 Getters/setters are added through meta-programming-magic. If the setter is invoked on a unsafed parent then the setting is not saved until the parent is saved, else setting is saved upon creation (i.e. first time the setter is called) / change (subsequent calls).
 The getters/setters can be used in standard AR validations, Rails mass assignments/form helpers and so on.
+
+
+# Locale Awareness
+
+has_setting has basic locale awareness. So when getting a setting, has_setting looks for the setting with the current locale. If it doesn't find it, it just grabs the first setting it finds, ignoring the locale.
+When setting a setting, has_setting will look if a setting exists with the current locale and if not create a new settings record for the current locale.
+
 
 # Gotchas
 
@@ -97,7 +104,7 @@ has_setting should stay as simple as possible... still some ideas are around:
 
 # History
 
- * 0.4.3:
+ * 0.5:
    * Added basic locale awareness. If you update from a previous version, you need to add a locale column to the settings table.
  * 0.4.3:
    * Changed behaviour of :boolean formatters: Now they treat '0', 0, false, nil and '' as false, everything else as true
