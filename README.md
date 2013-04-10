@@ -1,4 +1,4 @@
-(This is now the official repository for the Simplificator [has_settings gem](https://github.com/simplificator/has_setting))
+(This is now the official repository for the Simplificator [has_setting gem](https://github.com/simplificator/has_setting))
 
 # What is it?
 
