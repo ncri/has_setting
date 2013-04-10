@@ -1,3 +1,5 @@
+(This is now the official repository for the Simplificator [has_settings gem](https://github.com/simplificator/has_setting))
+
 # What is it?
 
 has_setting is a simple extension that enables ActiveRecord models to
