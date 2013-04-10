@@ -28,8 +28,6 @@ end
   ActiveRecord::Base.connection.create_table(table) do |t|
   end
 end
-ActiveRecord::Base.logger = Logger.new(STDOUT)
-ActiveRecord::Base.logger.level = Logger::DEBUG # change to DEBUG if you want to see something :-)
 
 require File.join(File.dirname(__FILE__), 'foo')
 require File.join(File.dirname(__FILE__), 'bar')

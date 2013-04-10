@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class HasSettingTest < Test::Unit::TestCase
-  def setup()
+  def setup
     @foo = Foo.create!
     @bar = Bar.create!
     @baz = Baz.create!

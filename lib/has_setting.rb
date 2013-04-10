@@ -2,9 +2,10 @@
 require File.dirname(__FILE__) + '/has_setting/ar_extensions'
 require File.dirname(__FILE__) + '/has_setting/formatters'
 require File.dirname(__FILE__) + '/has_setting/setting'
-ActiveRecord::Base.class_eval do
-  include(HasSetting::InstanceMethods)
-  extend(HasSetting::ClassMethods)
+
+
+ActiveSupport.on_load(:active_record) do
+  include HasSetting
 end
 
 
