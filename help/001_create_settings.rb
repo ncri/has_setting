@@ -5,6 +5,7 @@ class CreateSettings < ActiveRecord::Migration
        t.integer(:owner_id,         :null => false)
        t.string(:name,              :null => false,   :length => 64)
        t.string(:value,             :null => true,    :length => 255)
+       t.string(:locale,            :null => true)
        t.timestamps
       end
   end

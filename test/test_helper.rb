@@ -23,6 +23,7 @@ ActiveRecord::Base.connection.create_table(:settings) do |table|
   table.string(:name,       :limit => 64,     :null => false)
   table.string(:owner_type, :limit => 255,    :null => false)
   table.integer(:owner_id,                    :null => false)
+  table.string(:locale)
 end
 [:foos, :bars, :bazs].each do |table|
   ActiveRecord::Base.connection.create_table(table) do |t|

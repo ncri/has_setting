@@ -143,6 +143,16 @@ class HasSettingTest < Test::Unit::TestCase
     @foo.setting_4 = false
     assert_equal false, @foo.setting_4
   end
+
+  def test_locale_awareness
+    I18n.locale = :de
+    @bar.setting_1 = 'setting de'
+    I18n.locale = 'de-CH'
+    @bar.setting_1 = 'setting ch'
+    assert_equal 'setting ch', @bar.setting_1
+    I18n.locale = :de
+    assert_equal 'setting de', @bar.setting_1
+  end
   
   
 end

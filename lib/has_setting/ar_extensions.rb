@@ -56,14 +56,16 @@ module HasSetting
 
   def write_setting(name, value)
     # find an existing setting or build a new one
-    setting = self.settings.detect() {|item| item.name == name }
-    setting = self.settings.build(:name => name) if setting.blank?
+    setting = self.settings.detect() {|item| item.name == name and item.locale.to_s == I18n.locale.to_s }
+    setting = self.settings.build(:name => name, locale: I18n.locale.to_s) if setting.blank?
     setting.value = value
   end
 
   def read_setting(name)
     # use detect instead of SQL find. like this the 'cached' has_many-collection is inited 
     # only once
-    self.settings.detect() {|item| item.name == name }
+    s = self.settings.detect() {|item| item.name == name and item.locale.to_s == I18n.locale.to_s} # first see if there is a setting with current locale
+    s ||= self.settings.detect() {|item| item.name == name} # then if not found, take the first setting with matching name (TODO: add locale fallbacks)
+    s
   end
 end
