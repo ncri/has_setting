@@ -8,13 +8,13 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = false
 end
 
-require 'rdoc/task'
-Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = 'has_setting'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
+# require 'rake/rdoctask'
+# Rake::RDocTask.new do |rdoc|
+#   rdoc.rdoc_dir = 'rdoc'
+#   rdoc.title = 'has_setting'
+#   rdoc.options << '--line-numbers' << '--inline-source'
+#   rdoc.rdoc_files.include('README*')
+#   rdoc.rdoc_files.include('lib/**/*.rb')
+# end
 
 task :default => :test
