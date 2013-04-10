@@ -1,7 +1,7 @@
 # What is it?
 
 has_setting is a simple extension that enables ActiveRecord models to
-store settings in a separate settings table as key/value pairs where the key and value are stored as Strings.
+store settings in a separate settings table as key/value pairs where the key and value are stored as strings.
 
 
 # Installation
