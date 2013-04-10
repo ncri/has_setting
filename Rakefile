@@ -8,7 +8,7 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = false
 end
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = 'has_setting'
