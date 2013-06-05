@@ -5,9 +5,9 @@ require 'test/unit'
 require File.dirname(__FILE__) + '/../lib/has_setting'
 
 
-ActiveRecord::Base.establish_connection(  
-  :adapter  => 'sqlite3',   
-  :database => 'test.sqlite3',   
+ActiveRecord::Base.establish_connection(
+  :adapter  => 'sqlite3',
+  :database => 'test.sqlite3',
   :timeout => 5000
 )
 

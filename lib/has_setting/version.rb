@@ -1,3 +1,3 @@
 module HasSetting
-  VERSION = "0.5"
+  VERSION = "0.55"
 end

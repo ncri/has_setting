@@ -33,8 +33,7 @@ module HasSetting
 
       # default options
       type = options[:type] || :string    # treat as string
-        # default could be false, thats why we use has_key?
-      default = options[:default] || (options.has_key?(:default) ? options[:default] : nil) # no default
+      options[:localize] ||= false
       self.has_setting_options[name] = options
 
       # setter
@@ -47,7 +46,7 @@ module HasSetting
       define_method(name) do |*args|
         setting = read_setting(name)
         options = args.first || self.class.has_setting_options[name]
-        return options[:default] if setting.nil? 
+        return options[:default] if setting.nil?
         formatter = Formatters.for_type(options[:type] || type)
         formatter.to_type(setting.value)
       end
@@ -56,16 +55,24 @@ module HasSetting
 
   def write_setting(name, value)
     # find an existing setting or build a new one
-    setting = self.settings.detect() {|item| item.name == name and item.locale.to_s == I18n.locale.to_s }
-    setting = self.settings.build(:name => name, locale: I18n.locale.to_s) if setting.blank?
+    locale = localize?(name) ? I18n.locale : nil
+    setting = self.settings.detect() {|item| item.name == name and item.locale.to_s == locale.to_s }
+    setting = self.settings.build(:name => name, locale: locale) if setting.blank?
     setting.value = value
   end
 
   def read_setting(name)
     # use detect instead of SQL find. like this the 'cached' has_many-collection is inited 
     # only once
-    s = self.settings.detect() {|item| item.name == name and item.locale.to_s == I18n.locale.to_s} # first see if there is a setting with current locale
+    locale = localize?(name) ? I18n.locale.to_s : nil
+    s = self.settings.detect() {|item| item.name == name and item.locale.to_s == locale} # first see if there is a setting with current locale
     s ||= self.settings.detect() {|item| item.name == name} # then if not found, take the first setting with matching name (TODO: add locale fallbacks)
     s
   end
+
+  def localize? name
+    options = self.class.has_setting_options[name]
+    options ? options[:localize] : false
+  end
+
 end
