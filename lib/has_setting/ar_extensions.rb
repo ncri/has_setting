@@ -11,7 +11,7 @@ module HasSetting
       self.class_eval do
         unless @has_setting_options # define only once
           # AR association to settings
-          has_many( :settings, :as => :owner, :class_name => 'HasSetting::Setting', 
+          has_many( :settings, :as => :owner, :class_name => 'HasSetting::Setting',
                     :foreign_key => :owner_id, :dependent => :destroy)
           after_save(:save_has_setting_association)
           @has_setting_options = {}
@@ -45,7 +45,7 @@ module HasSetting
       # getter
       define_method(name) do |*args|
         setting = read_setting(name)
-        options = args.first || self.class.has_setting_options[name]
+        options = args.first || has_setting_option(name)
         return options[:default] if setting.nil?
         formatter = Formatters.for_type(options[:type] || type)
         formatter.to_type(setting.value)
@@ -62,7 +62,7 @@ module HasSetting
   end
 
   def read_setting(name)
-    # use detect instead of SQL find. like this the 'cached' has_many-collection is inited 
+    # use detect instead of SQL find. like this the 'cached' has_many-collection is inited
     # only once
     locale = localize?(name) ? I18n.locale.to_s : nil
     s = self.settings.detect() {|item| item.name == name and item.locale.to_s == locale} # first see if there is a setting with current locale
@@ -71,8 +71,20 @@ module HasSetting
   end
 
   def localize? name
-    options = self.class.has_setting_options[name]
+    options = has_setting_option name
     options ? options[:localize] : false
+  end
+
+  def has_setting_option name
+    klass = self.class
+    option = klass.has_setting_options ? klass.has_setting_options[name] : nil
+    while option.nil? and
+          klass.superclass != ActiveRecord::Base and
+          klass.superclass.respond_to?(:has_setting_options)
+      klass = klass.superclass
+      option = klass.has_setting_options[name]
+    end
+    option
   end
 
 end
