@@ -13,7 +13,7 @@ module HasSetting
           # AR association to settings
           has_many( :settings, :as => :owner, :class_name => 'HasSetting::Setting',
                     :foreign_key => :owner_id, :dependent => :destroy)
-          after_save(:save_has_setting_association)
+          after_validation(:save_has_setting_association)
           @has_setting_options = {}
           def self.has_setting_options
             @has_setting_options
