@@ -64,7 +64,7 @@ module HasSetting
   def read_setting(name)
     # use detect instead of SQL find. like this the 'cached' has_many-collection is inited
     # only once
-    locale = localize?(name) ? I18n.locale.to_s : nil
+    locale = localize?(name) ? I18n.locale.to_s : ""
     s = self.settings.detect() {|item| item.name == name and item.locale.to_s == locale} # first see if there is a setting with current locale
     s ||= self.settings.detect() {|item| item.name == name} # then if not found, take the first setting with matching name (TODO: add locale fallbacks)
     s
