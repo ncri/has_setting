@@ -59,6 +59,9 @@ module HasSetting
     setting = self.settings.detect() {|item| item.name == name and item.locale.to_s == locale.to_s }
     setting = self.settings.build(:name => name, locale: locale) if setting.blank?
     setting.value = value
+    # mark model as changed to make sure model is saved so that after_save is triggered even if only settings change
+    # maybe there is a better way of doing this.
+    self.updated_at = Time.now if self.respond_to?(:updated_at)
   end
 
   def read_setting(name)
