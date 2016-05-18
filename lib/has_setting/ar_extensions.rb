@@ -34,6 +34,7 @@ module HasSetting
       # default options
       type = options[:type] || :string    # treat as string
       options[:localize] ||= false
+      options[:no_fallback] ||= false
       self.has_setting_options[name] = options
 
       # setter
@@ -69,13 +70,18 @@ module HasSetting
     # only once
     locale = localize?(name) ? I18n.locale.to_s : ""
     s = self.settings.detect() {|item| item.name == name and item.locale.to_s == locale} # first see if there is a setting with current locale
-    s ||= self.settings.detect() {|item| item.name == name} # then if not found, take the first setting with matching name (TODO: add locale fallbacks)
+    s ||= self.settings.detect() {|item| item.name == name} unless no_fallback?(name) # then if not found, take the first setting with matching name (TODO: add locale fallbacks)
     s
   end
 
   def localize? name
     options = has_setting_option name
     options ? options[:localize] : false
+  end
+
+  def no_fallback? name
+    options = has_setting_option name
+    options ? options[:no_fallback] : false
   end
 
   def has_setting_option name
