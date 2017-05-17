@@ -88,9 +88,10 @@ module HasSetting
     klass = self.class
     option = klass.has_setting_options ? klass.has_setting_options[name] : nil
     while option.nil? and
-          klass.base_class != ActiveRecord::Base and
-          klass.base_class.respond_to?(:has_setting_options)
-      klass = klass.base_class
+          klass.superclass != ActiveRecord::Base and
+          klass.superclass.respond_to?(:has_setting_options) and
+          klass.superclass.has_setting_options
+      klass = klass.superclass
       option = klass.has_setting_options[name]
     end
     option
