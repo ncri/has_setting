@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require_relative '../test_helper'
 
 class HasSettingTest < Test::Unit::TestCase
   def setup
@@ -87,7 +87,7 @@ class HasSettingTest < Test::Unit::TestCase
     assert_equal(12, @bar.setting_2)
   end
 
-  def test_default_values()
+  def test_default_values
     assert_equal('def', @foo.with_default)
     assert_equal('override def', @foo.with_default(:default => 'override def'))
     @foo.with_default = 'not def'
@@ -120,6 +120,7 @@ class HasSettingTest < Test::Unit::TestCase
     @foo = Foo.find @foo.id
     assert_equal true, @foo.setting_3
   end
+
   def test_boolean_setting_with_default
     assert_equal false, @foo.setting_4
     @foo.setting_4 = true
@@ -136,6 +137,10 @@ class HasSettingTest < Test::Unit::TestCase
     assert_equal nil, @foo.setting_4
     @foo.setting_4 = false
     assert_equal false, @foo.setting_4
+  end
+
+  def test_proc_value_as_default_value
+    assert_equal @foo.setting_5, true
   end
 
   def test_locale_awareness

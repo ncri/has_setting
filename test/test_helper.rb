@@ -4,6 +4,7 @@ require 'test/unit'
 
 require File.dirname(__FILE__) + '/../lib/has_setting'
 
+I18n.available_locales = %w(en de de-CH)
 
 ActiveRecord::Base.establish_connection(
   :adapter  => 'sqlite3',

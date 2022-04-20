@@ -41,9 +41,7 @@ This will create the following methods for you on the owner class:
   * *:strings* Uses the StringsFormatter to convert from/to string[]
   * *:booleans* Uses the BooleansFormatter to convert from/to boolean[]
   * *:strict_booleans* Uses the BooleansFormatter to convert from/to boolean[]
-  * *:default* allows you to specify a default value that will be returned if the setting does not exist (i.e. has never been written). Note that the default value is _ignored_ if the setting exists, no matter what the value of the setting is. The default value is returned as is, no type conversion takes place.
-
-
+  * *:default* allows you to specify a default value that will be returned if the setting does not exist (i.e. has never been written). Note that the default value is _ignored_ if the setting exists, no matter what the value of the setting is. The default value is returned as is, no type conversion takes place. You can provide `Proc` as a default value. In this case it will be executed withing the object's context and the result will be returned as a default value.
 
 # How it works
 
@@ -105,7 +103,9 @@ has_setting should stay as simple as possible... still some ideas are around:
  * Add validation options
 
 # History
-
+ 
+ * 1.0.4
+   * Added possibility to provide `Proc` as default value
  * 0.5:
    * Added basic locale awareness. If you update from a previous version, you need to add a locale column to the settings table.
  * 0.4.3:
