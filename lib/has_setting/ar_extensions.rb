@@ -47,7 +47,15 @@ module HasSetting
       define_method(name) do |*args|
         setting = read_setting(name)
         options = args.first || has_setting_option(name)
-        return options[:default] if setting.nil?
+        if setting.nil?
+          result =
+            if options[:default].is_a?(Proc)
+              instance_exec(&options[:default])
+            else
+              options[:default]
+            end
+          return result
+        end
         formatter = Formatters.for_type(options[:type] || type)
         formatter.to_type(setting.value)
       end

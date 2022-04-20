@@ -1,4 +1,5 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require_relative '../test_helper'
+
 include HasSetting
 class FormattersTest < Test::Unit::TestCase
   def test_for_type

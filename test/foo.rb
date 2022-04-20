@@ -5,4 +5,5 @@ class Foo < ActiveRecord::Base
   
   has_setting(:setting_3, :type => :boolean)
   has_setting(:setting_4, :type => :boolean, :default => false)
+  has_setting(:setting_5, :type => :boolean, :default => -> { is_a?(Foo) })
 end
